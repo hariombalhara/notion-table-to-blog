@@ -2,7 +2,7 @@
 
 ```bash
 npm install notion-table-to-blog --save-dev
-
+npx notion-table-to-blog
 ```
 ## Why this tool ?
 - I like Notion. I jot down whatever I learn there.
