@@ -110,7 +110,7 @@ async function getPosts({
             zip.getEntries().forEach((zipEntry) => {
               if(!zipEntry.entryName.endsWith('.md')) {
                   const folderName = zipEntry.entryName.split('/')[0]
-                  zip.extractEntryTo(zipEntry.entryName, `./static/notion/${encodeURIComponent(folderName)}`,false, true/* override */)
+                  zip.extractEntryTo(zipEntry.entryName, `./static/${NOTION_ASSETS_PATH_RELATIVE_TO_ROOT_OF_WEBSITE}/${folderName}`,false, true/* override */)
               } else {
                 markdown = zipEntry.getData().toString().trim();
                 // Fix Broken Image embedding in markdown
