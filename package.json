@@ -1,0 +1,21 @@
+{
+  "name": "notion-table-to-blog",
+  "version": "1.0.0",
+  "description": "Write in notion, get markdowns, use them anywhere",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@notionhq/client": "^0.3.1",
+    "commander": "^8.1.0",
+    "dotenv": "^10.0.0",
+    "gray-matter": "^4.0.3",
+    "notion-exporter": "^0.1.2",
+    "single-line-log": "^1.1.2",
+    "slugify": "^1.6.0"
+  }
+}
