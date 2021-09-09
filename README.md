@@ -1,5 +1,9 @@
 # Notion Table => Blog
 
+```bash
+npm install notion-table-to-blog --save-dev
+
+```
 ## Why this tool ?
 - I like Notion. I jot down whatever I learn there.
 - I want to share my leanings with the world but I want to choose the way

@@ -1,10 +1,6 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-plusplus */
-/* eslint-disable camelcase */
+#!/usr/bin/env node
 import { Client } from "@notionhq/client";
 import dotenv from "dotenv";
-// eslint-disable-next-line import/no-unresolved
 import fs from "node:fs";
 import NotionExporter from "notion-exporter";
 import { stdout as singleLineLog } from "single-line-log";
@@ -60,7 +56,6 @@ async function getPostsList() {
     const pages = [];
     while (true) {
         progressiveLog("Fetching Posts List");
-        // eslint-disable-next-line no-await-in-loop
         const { results, next_cursor } = await notion.databases.query({
             database_id: NOTION_MY_BLOG_DATABASE_ID,
             start_cursor: cursor,
@@ -93,7 +88,6 @@ async function getPosts({
     const pages = await getPostsList();
     const filteredPages = [];
 
-    // eslint-disable-next-line no-underscore-dangle
     const _shouldFetchPost = (page) => {
         if (!page.properties.published.checkbox && publishedOnly) {
             unpublishedPosts.push(page);
@@ -105,18 +99,14 @@ async function getPosts({
     for (let i = 0; i < pages.length; i++) {
         const page = pages[i];
 
-        // eslint-disable-next-line no-use-before-define 
         if (_shouldFetchPost(page)) {
           progressiveLog(`Fetching Page "${getPostTitle(page)}"`);
 
-            // eslint-disable-next-line no-await-in-loop
-            // eslint-disable-next-line new-cap
             const notionExporter = new NotionExporter.default(
                 NOTION_TOKEN
             );
             const zip = await notionExporter.getZipUrl(page.id).then(notionExporter.getZip)
             let markdown = null;
-            // eslint-disable-next-line no-loop-func
             zip.getEntries().forEach((zipEntry) => {
               if(!zipEntry.entryName.endsWith('.md')) {
                   const folderName = zipEntry.entryName.split('/')[0]
@@ -125,7 +115,6 @@ async function getPosts({
                 markdown = zipEntry.getData().toString().trim();
                 // Fix Broken Image embedding in markdown
                 // Convert [ABC.webp](/Easiest%20and%20Reliable%20way%20to%20identify%20the%20last%20acti%20761668d0e209475595a4da1bbfea1178/pexels-markus-spiske-1089440.webp) => ![ABC.webp](/notion/Easiest%20and%20Reliable%20way%20to%20identify%20the%20last%20acti%20761668d0e209475595a4da1bbfea1178/pexels-markus-spiske-1089440.webp) 
-                // eslint-disable-next-line prefer-arrow-callback
                 markdown = markdown.replace(/\[(.*?(?:webp|png|avif|jpg|jpeg|gif|mp4|webm))\](\s*)\((.*?)\)/g,function (match, p1, p2, p3) {
                   // If the path is an absolute URL, don't change it
                   if (!match.includes('https://')) {

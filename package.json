@@ -1,9 +1,9 @@
 {
   "name": "notion-table-to-blog",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Write in notion, get markdowns, use them anywhere",
   "main": "index.js",
-  "bin":"index.js",
+  "bin": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
