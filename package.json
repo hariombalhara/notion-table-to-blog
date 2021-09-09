@@ -1,6 +1,6 @@
 {
   "name": "notion-table-to-blog",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Write in notion, get markdowns, use them anywhere",
   "main": "index.js",
   "bin": "index.js",
