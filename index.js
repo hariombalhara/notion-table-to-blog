@@ -7,7 +7,7 @@ import { stdout as singleLineLog } from "single-line-log";
 import slugify from "slugify";
 import matter from "gray-matter";
 import { Command } from 'commander';
-
+let isDevMode = process.env.NODE_ENV === "development";
 dotenv.config();
 
 const program = new Command();
@@ -80,6 +80,26 @@ function getMarkdownWithFrontMatter(markdown){
   return `---\n${frontmatter}\ntitle: ${title.replace('#', '')}\n---\n\n${content.join('\n\n')}`
 }
 
+function getMarkdownWithEmbedsAsHtml(markdown) {
+    let {data, content} = matter(markdown);
+    return markdown.replace(/{EMBED_([^_]+)_([^}])}/g, function(m, g1, g2) {
+        if (g1 !== 'CODESANDBOX') {
+            throw new Error(`Unsupported embed type ${g1}`);
+        }
+        if (!data[`EMBED_${g1}_${g2}`]) {
+            throw new Error(`Embed property EMBED_${g1}_${g2} not found. Available properties: ${JSON.stringify(data)}`);
+        }
+        const embedUrl = data[`EMBED_${g1}_${g2}`];
+        const codeSandboxEmbed = `<iframe src="${embedUrl}"
+        style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+      ></iframe>`
+      
+        return codeSandboxEmbed;
+    })
+}
+
 const unpublishedPosts = [];
 async function getPosts({
     publishedOnly = true,
@@ -125,7 +145,8 @@ async function getPosts({
               }
             })
            
-            pages[i].markdown = getMarkdownWithFrontMatter(markdown)
+            markdown = getMarkdownWithFrontMatter(markdown)
+            pages[i].markdown = getMarkdownWithEmbedsAsHtml(markdown)
             filteredPages.push(page);
         }
     }
@@ -148,13 +169,18 @@ async function writePosts(postsLocation) {
     const skippedPosts = [];
     const writtenPosts = [];
     const posts = await getPosts({
-        publishedOnly: true,
+        publishedOnly: isDevMode ? false: true,
         shouldFetchPost: (post) => {
             const postSlug = getSlug(post);
             const postPath = getPostPath(postSlug, postsLocation);
             let shouldUpdatePost = false;
             if (fs.existsSync(postPath)) {
+
                 const {data:{lastModifiedTs:postLastModifiedTs}}  = matter(fs.readFileSync(postPath, 'utf8'));
+                if (postLastModifiedTs === undefined) {
+                    console.log( matter(fs.readFileSync(postPath, 'utf8')))
+                    throw new Error(`Post ${postPath} has no lastModifiedTs. Deleting the local markdown and rerun`);
+                }
                 if (postLastModifiedTs < new Date(post.properties.lastModifiedTs.formula.number)) {
                     shouldUpdatePost = true;
                 } else {
