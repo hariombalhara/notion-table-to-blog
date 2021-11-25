@@ -138,7 +138,7 @@ async function getPosts({
                 markdown = markdown.replace(/\[(.*?(?:webp|png|avif|jpg|jpeg|gif|mp4|webm))\](\s*)\((.*?)\)/g,function (match, p1, p2, p3) {
                   // If the path is an absolute URL, don't change it
                   if (!match.includes('https://')) {
-                    return `[${p1}](/${NOTION_ASSETS_PATH_RELATIVE_TO_ROOT_OF_WEBSITE}/${p3})`
+                    return `![${p1}](/${NOTION_ASSETS_PATH_RELATIVE_TO_ROOT_OF_WEBSITE}/${p3})`
                   }
                   return match
                 })
