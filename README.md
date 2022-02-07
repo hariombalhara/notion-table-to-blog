@@ -13,7 +13,7 @@ npx notion-table-to-blog
 - No dependency on Notion. All your posts stays in your repo if you need to say bye to Notion.
 
 ## How it works ?
-1. Write in Notion. Use [this](https://prickle-weaver-314.notion.site/99fd5a455d8e4dd981176fc6dbc74f33?v=25c9813976174e92a08e9ffd615714b1) template to start.
+1. Write in Notion. Use [this](https://hariombalhara.notion.site/99fd5a455d8e4dd981176fc6dbc74f33?v=25c9813976174e92a08e9ffd615714b1) template to start.
 2. Run this command manually or better set it up with your CI to run every few mins.
 3. You will get the Posts as markdown.
 4. Use those markdowns the way you want.
